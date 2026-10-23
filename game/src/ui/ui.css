@@ -1,0 +1,170 @@
+/* ============================================================================
+   THE LAST EXORCISM - UI styles (HUD, menus, mobile controls, overlays)
+   ========================================================================== */
+:root {
+  --ink: #05060a;
+  --bone: #d8d2c4;
+  --blood: #7e1616;
+  --amber: #d9a441;
+  --ghost: #9fd8ff;
+  --panel: rgba(10, 12, 16, 0.88);
+  --edge: rgba(216, 210, 196, 0.18);
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0; height: 100%; overflow: hidden; background: var(--ink);
+  overscroll-behavior: none; touch-action: none; user-select: none;
+  -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+}
+
+body { font-family: Georgia, 'Times New Roman', serif; color: var(--bone); }
+
+.tle-app { position: fixed; inset: 0; }
+.tle-canvas-wrap { position: absolute; inset: 0; }
+
+/* ---------- Menu / title ---------- */
+.menu-bg {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(40, 12, 12, 0.5), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(10, 20, 30, 0.6), transparent 55%),
+    var(--ink);
+  z-index: 40; overflow-y: auto; touch-action: pan-y; padding: 24px;
+}
+.menu-card { max-width: 640px; width: 100%; text-align: center; }
+.title {
+  font-size: clamp(30px, 7vw, 64px); letter-spacing: 0.12em; margin: 0;
+  color: var(--bone); text-shadow: 0 0 24px rgba(126, 22, 22, 0.8);
+}
+.tagline { font-style: italic; color: #9b9284; margin: 10px 0 26px; font-size: clamp(13px, 2.6vw, 17px); }
+.mbtn {
+  display: block; width: min(420px, 90%); margin: 10px auto; padding: 13px 18px;
+  background: rgba(20, 22, 28, 0.9); border: 1px solid var(--edge); color: var(--bone);
+  font-size: clamp(15px, 2.6vw, 18px); font-family: inherit; letter-spacing: 0.06em; cursor: pointer;
+  transition: all 0.15s;
+}
+.mbtn:hover, .mbtn:active { border-color: var(--amber); color: var(--amber); background: rgba(40, 30, 12, 0.6); }
+.mbtn.small { width: auto; display: inline-block; padding: 8px 14px; font-size: 14px; margin: 6px; }
+.mbtn.danger { border-color: rgba(126, 22, 22, 0.7); }
+input.tle-input {
+  width: min(420px, 90%); padding: 12px; margin: 8px auto; background: rgba(0,0,0,0.5);
+  border: 1px solid var(--edge); color: var(--bone); font-family: inherit; font-size: 16px; text-align: center;
+}
+
+/* ---------- HUD ---------- */
+.hud { position: absolute; inset: 0; pointer-events: none; z-index: 10; }
+.crosshair {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 6px; height: 6px; border-radius: 50%; background: rgba(216, 210, 196, 0.55);
+}
+.interact-prompt {
+  position: absolute; left: 50%; top: 57%; transform: translateX(-50%);
+  background: var(--panel); border: 1px solid var(--edge); padding: 8px 16px;
+  font-size: calc(15px * var(--tsz, 1)); white-space: nowrap;
+}
+.vitals { position: absolute; left: 14px; bottom: 14px; display: flex; gap: 10px; }
+.bar { width: 130px; }
+.bar .lbl { font-size: calc(11px * var(--tsz, 1)); letter-spacing: 0.1em; opacity: 0.75; }
+.bar .track { height: 7px; background: rgba(255,255,255,0.08); border: 1px solid var(--edge); }
+.bar .fill { height: 100%; transition: width 0.25s; }
+.fill.hp { background: var(--blood); }
+.fill.sn { background: #3f6d8e; }
+.seal-hud { position: absolute; right: 14px; top: 12px; text-align: right; font-size: calc(12px * var(--tsz, 1)); }
+.chapter-hud {
+  position: absolute; left: 14px; top: 12px; max-width: min(340px, 60vw);
+  background: var(--panel); border-left: 2px solid var(--amber); padding: 8px 12px;
+  font-size: calc(12.5px * var(--tsz, 1));
+}
+.chapter-hud .ch-title { color: var(--amber); letter-spacing: 0.08em; margin-bottom: 4px; }
+.obj { opacity: 0.85; } .obj.done { text-decoration: line-through; opacity: 0.4; }
+.slot-hud { position: absolute; right: 14px; bottom: 14px; background: var(--panel); border: 1px solid var(--edge); padding: 8px 12px; font-size: calc(13px * var(--tsz, 1)); }
+.toast {
+  position: absolute; left: 50%; bottom: 16%; transform: translateX(-50%);
+  background: var(--panel); border: 1px solid var(--edge); padding: 10px 20px;
+  font-size: calc(15px * var(--tsz, 1)); max-width: 86vw; text-align: center; animation: fadein 0.3s;
+}
+.hint-line {
+  position: absolute; left: 50%; top: 20%; transform: translateX(-50%);
+  color: var(--ghost); font-style: italic; font-size: calc(14px * var(--tsz, 1)); text-shadow: 0 0 12px rgba(159, 216, 255, 0.5);
+  max-width: 80vw; text-align: center;
+}
+@keyframes fadein { from { opacity: 0; transform: translate(-50%, 8px);} to { opacity: 1; } }
+.spirit-vignette { position: absolute; inset: 0; box-shadow: inset 0 0 18vw 6vw rgba(80, 160, 220, 0.25); }
+.low-sanity { position: absolute; inset: 0; box-shadow: inset 0 0 22vw 8vw rgba(80, 0, 0, 0.4); animation: pulse 2.4s infinite; }
+@keyframes pulse { 50% { opacity: 0.55; } }
+
+/* ---------- Panels (inventory / notebook / note reader) ---------- */
+.overlay {
+  position: absolute; inset: 0; background: rgba(3, 4, 7, 0.82); z-index: 30;
+  display: flex; align-items: center; justify-content: center; pointer-events: auto;
+}
+.panel {
+  background: var(--panel); border: 1px solid var(--edge); width: min(680px, 94vw);
+  max-height: 86vh; overflow-y: auto; padding: 20px 24px; touch-action: pan-y;
+}
+.panel h2 { color: var(--amber); letter-spacing: 0.1em; font-size: calc(19px * var(--tsz, 1)); margin-top: 0; }
+.item-row {
+  display: flex; justify-content: space-between; gap: 12px; padding: 10px;
+  border: 1px solid transparent; cursor: pointer; font-size: calc(14px * var(--tsz, 1));
+}
+.item-row:hover, .item-row.sel { border-color: var(--amber); }
+.note-entry { border-bottom: 1px dashed var(--edge); padding: 10px 0; cursor: pointer; font-size: calc(14px * var(--tsz, 1)); }
+.note-body { white-space: pre-wrap; line-height: 1.55; font-size: calc(15px * var(--tsz, 1)); color: #cfc8ba; }
+.x-close { float: right; cursor: pointer; color: var(--amber); font-size: 20px; }
+
+/* ---------- Puzzle dial (touch friendly) ---------- */
+.dial { text-align: center; }
+.dial .num { font-size: 56px; color: var(--amber); margin: 10px; }
+.dial button { font-size: 26px; padding: 10px 26px; margin: 8px; background: #17181d; color: var(--bone); border: 1px solid var(--edge); cursor: pointer; }
+
+/* ---------- Dialogue ---------- */
+.dialogue { position: absolute; left: 50%; bottom: 9%; transform: translateX(-50%); width: min(720px, 94vw);
+  background: var(--panel); border: 1px solid var(--edge); padding: 16px 20px; z-index: 25; pointer-events: auto; }
+.dialogue .who { color: var(--ghost); letter-spacing: 0.1em; font-size: 13px; }
+.dialogue .line { font-size: calc(16px * var(--tsz, 1)); margin: 8px 0 12px; font-style: italic; }
+.choices button { display: block; width: 100%; text-align: left; margin: 6px 0; padding: 10px 14px;
+  background: #12141a; border: 1px solid var(--edge); color: var(--bone); cursor: pointer; font-family: inherit; font-size: calc(14px * var(--tsz,1)); }
+.choices button:hover { border-color: var(--amber); }
+
+/* ---------- Mobile controls ---------- */
+.mobile-layer { position: absolute; inset: 0; z-index: 20; pointer-events: none; }
+.joystick {
+  position: absolute; left: 22px; bottom: 26px; width: 128px; height: 128px; border-radius: 50%;
+  background: rgba(216, 210, 196, 0.08); border: 1px solid var(--edge); pointer-events: auto; touch-action: none;
+}
+.joystick .knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px;
+  border-radius: 50%; background: rgba(216, 210, 196, 0.28); }
+.touch-look { position: absolute; right: 0; top: 0; width: 62%; height: 100%; pointer-events: auto; touch-action: none; }
+.mbtns { position: absolute; right: 14px; bottom: 20px; display: grid; grid-template-columns: repeat(3, 64px); gap: 10px; pointer-events: auto; }
+.mbtns button {
+  width: 64px; height: 64px; border-radius: 50%; font-size: 11px; background: rgba(16, 18, 24, 0.85);
+  color: var(--bone); border: 1px solid var(--edge); touch-action: manipulation;
+}
+.mbtns button.on { border-color: var(--amber); color: var(--amber); }
+.mtop { position: absolute; left: 14px; top: 14px; display: flex; gap: 8px; pointer-events: auto; }
+.mtop button { padding: 10px 12px; background: rgba(16,18,24,0.85); color: var(--bone); border: 1px solid var(--edge); font-size: 12px; }
+
+/* ---------- Pause / settings ---------- */
+.settings-row { display: flex; align-items: center; justify-content: space-between; margin: 12px 0; font-size: calc(14px * var(--tsz,1)); }
+.settings-row input[type='range'] { width: 46%; accent-color: var(--amber); }
+.qbtns button { margin-right: 6px; padding: 8px 14px; background: #12141a; color: var(--bone); border: 1px solid var(--edge); cursor: pointer; }
+.qbtns button.sel { border-color: var(--amber); color: var(--amber); }
+
+/* ---------- Chapter card & endings ---------- */
+.chapter-card { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 35;
+  background: rgba(3,4,7,0.94); pointer-events: auto; padding: 20px; }
+.chapter-inner { max-width: 620px; text-align: center; }
+.chapter-inner .num { color: var(--blood); letter-spacing: 0.3em; font-size: 14px; }
+.chapter-inner h1 { font-size: clamp(24px, 5vw, 40px); letter-spacing: 0.08em; }
+.chapter-inner p { font-style: italic; color: #a89f8f; line-height: 1.6; }
+.ending-screen { position: absolute; inset: 0; background: black; z-index: 60; display: flex;
+  align-items: center; justify-content: center; text-align: center; padding: 24px; pointer-events: auto; }
+.ending-screen h1 { color: var(--amber); letter-spacing: 0.14em; }
+.ending-screen p { max-width: 640px; line-height: 1.7; color: #bdb5a6; }
+
+@media (max-width: 640px) {
+  .chapter-hud { max-width: 55vw; }
+  .vitals .bar { width: 92px; }
+}
