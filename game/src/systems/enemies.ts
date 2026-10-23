@@ -114,7 +114,8 @@ export function updateEnemies(dt: number, playerPos: THREE.Vector3, playerRegion
       butcher.timer -= dt;
       if (butcher.timer <= 0) {
         butcher.timer = 4 + Math.random() * 5;
-        const roomCenter = new THREE.Vector3(regionCenter(butcher.region));
+        const c = regionCenter(butcher.region);
+        const roomCenter = new THREE.Vector3(c.x, c.y, c.z);
         butcher.pos.lerp(roomCenter.add(new THREE.Vector3((Math.random() - 0.5) * 8, 0, (Math.random() - 0.5) * 8)), 0.6);
       }
       dragAccum += dt;

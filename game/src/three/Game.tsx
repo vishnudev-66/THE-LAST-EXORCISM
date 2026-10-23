@@ -22,7 +22,7 @@ const g = () => useGame.getState();
 function GameLogic() {
   useEffect(() => {
     const onChapter = (e: Event) => {
-      const ch = chapterById(e.detail as ChapterId);
+      const ch = chapterById((e as CustomEvent<ChapterId>).detail);
       // teleport to the chapter's start region
       goToRegion(ch.region);
       // chapter-specific wakes

@@ -1,0 +1,22 @@
+{
+  "name": "tle-server",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "THE LAST EXORCISM - authoritative multiplayer server (Socket.IO + Express)",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.17.6",
+    "tsx": "^4.19.2",
+    "typescript": "~5.6.3"
+  }
+}
